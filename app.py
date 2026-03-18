@@ -256,10 +256,11 @@ def main() -> None:
 
     st.title("Hand Gesture Recognition")
     st.markdown(
-        "Real-time classification using **XGBoost** (98.36% test accuracy) "
-        "and **PyTorch MLP** (98.75% test accuracy) trained on 18 gesture classes.  \n"
+        "Real-time classification using **XGBoost** (98.46% test accuracy) "
+        "and **PyTorch MLP** (98.79% test accuracy) trained on 18 gesture classes.  \n"
         "Landmarks are extracted by **MediaPipe** (21 keypoints → 63 normalised features)."
     )
+    st.image(ROOT / "dataset-cover.png", caption="18 gesture classes in the dataset", use_container_width=True)
 
     # Load both models once (cached)
     xgb_model, mlp_model, classes = load_models()
