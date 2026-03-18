@@ -1,0 +1,17 @@
+[server]
+# Required for cloud deployment (no browser auto-open)
+headless = true
+# Disable CORS restriction so streamlit-webrtc WebRTC signalling works
+enableCORS = false
+enableXsrfProtection = false
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "dark"
+primaryColor = "#00B4D8"
+backgroundColor = "#0F0F0F"
+secondaryBackgroundColor = "#1A1A2E"
+textColor = "#E8E8E8"
+font = "sans serif"

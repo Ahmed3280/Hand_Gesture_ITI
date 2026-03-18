@@ -1,0 +1,24 @@
+# PyTorch CPU-only wheel (avoids the ~2 GB CUDA build on Streamlit Community Cloud)
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+mediapipe>=0.10.0
+# opencv-python-headless is required on Linux servers (no display/GUI)
+# On your local Windows machine your existing opencv-contrib-python is used instead
+opencv-python-headless>=4.8.0
+xgboost>=2.0.0
+torch>=2.1.0
+scikit-learn>=1.3.0
+pandas>=2.0.0
+numpy>=1.24.0
+tqdm>=4.66.0
+
+# Streamlit app
+streamlit>=1.28.0
+streamlit-webrtc>=0.47.0
+aiortc>=1.6.0
+av>=10.0.0
+
+# Local-only tools (kept here so local venv stays complete)
+mlflow>=2.10.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
