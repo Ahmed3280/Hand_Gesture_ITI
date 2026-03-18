@@ -1,9 +1,0 @@
-data/
-mlflow/
-notebooks/
-**/__pycache__/
-**/*.pyc
-**/*.pyo
-.git/
-.claude/
-*.md

@@ -299,10 +299,14 @@ def train(
 
         mlflow.log_metrics({"test_accuracy": acc, "test_f1_weighted": f1})
 
-        # ── 6. Confusion matrix artifact ──────────────────────────────────────
+        # ── 6. Confusion matrix + classification report artifacts ─────────────
         cm_path = str(Path(tempfile.gettempdir()) / "mlp_confusion_matrix.png")
         _plot_confusion_matrix(cm, classes, cm_path)
         mlflow.log_artifact(cm_path, artifact_path="plots")
+
+        report_path = str(Path(tempfile.gettempdir()) / "mlp_classification_report.txt")
+        Path(report_path).write_text(report)
+        mlflow.log_artifact(report_path, artifact_path="reports")
 
         # ── 7. Log model ──────────────────────────────────────────────────────
         mlflow.pytorch.log_model(

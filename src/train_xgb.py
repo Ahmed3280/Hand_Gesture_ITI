@@ -166,11 +166,15 @@ def train(
             "test_f1_weighted": f1,
         })
 
-        # ── 6. Confusion matrix artifact ──────────────────────────────────────
+        # ── 6. Confusion matrix + classification report artifacts ─────────────
         cm_path = str(Path(tempfile.gettempdir()) / "xgb_confusion_matrix.png")
         _plot_confusion_matrix(cm, classes, cm_path)
         mlflow.log_artifact(cm_path, artifact_path="plots")
-        print(f"\nConfusion matrix saved.")
+
+        report_path = str(Path(tempfile.gettempdir()) / "xgb_classification_report.txt")
+        Path(report_path).write_text(report)
+        mlflow.log_artifact(report_path, artifact_path="reports")
+        print(f"\nConfusion matrix + classification report saved.")
 
         # ── 7. Log model to MLflow ────────────────────────────────────────────
         mlflow.xgboost.log_model(

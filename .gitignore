@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.python-version
+
+# Data (too large for git)
+data/
+
+# MLflow experiment tracking (local only)
+mlflow/
+
+# Claude internal
+.claude/
+
+# Misc
+*.log
+.DS_Store
