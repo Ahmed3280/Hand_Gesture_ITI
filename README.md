@@ -1,6 +1,6 @@
 # Hand Gesture Classification
 
-End-to-end pipeline for real-time hand gesture recognition using MediaPipe landmarks, XGBoost, and a PyTorch MLP — with MLflow experiment tracking, a FastAPI inference endpoint, and a Docker image.
+End-to-end pipeline for real-time hand gesture recognition using MediaPipe landmarks, XGBoost, and a PyTorch MLP — with MLflow experiment tracking and a Streamlit Community Cloud deployment.
 
 ---
 
@@ -10,11 +10,11 @@ End-to-end pipeline for real-time hand gesture recognition using MediaPipe landm
 |---|---|
 | **Dataset** | 25,675 samples · 18 gesture classes · 63 landmark features |
 | **Features** | 21 hand landmarks × (x, y, z) extracted by MediaPipe, normalized for position/scale invariance |
-| **XGBoost** | 98.36% test accuracy |
-| **PyTorch MLP** | 98.75% test accuracy |
-| **Tracking** | MLflow — params, per-epoch metrics, confusion matrices, model registry |
-| **API** | FastAPI `/predict` — accepts 63 floats, returns both model predictions in one JSON |
-| **Inference** | Real-time webcam with dual-model overlay HUD |
+| **XGBoost** | 98.46% test accuracy |
+| **PyTorch MLP** | 98.79% test accuracy |
+| **Tracking** | MLflow — params, per-epoch metrics, confusion matrices, classification reports, model registry |
+| **Deployment** | Streamlit Community Cloud — live WebRTC stream + snapshot fallback |
+| **Inference** | Real-time webcam with dual-model overlay HUD (local) |
 
 ### Gesture Classes (18)
 
@@ -34,9 +34,8 @@ hand-gesture-clf/
 │   ├── landmarks.py                  # MediaPipe extraction & normalization
 │   ├── train_xgb.py                  # XGBoost training + MLflow logging
 │   ├── train_mlp.py                  # PyTorch MLP training + MLflow logging
-│   └── inference.py                  # Real-time webcam inference
+│   └── inference.py                  # Real-time webcam inference (local)
 ├── api/
-│   ├── main.py                       # FastAPI /predict endpoint
 │   └── models/
 │       ├── xgb_model.json            # saved XGBoost model
 │       ├── mlp_model.pt              # saved MLP weights + metadata
@@ -45,8 +44,8 @@ hand-gesture-clf/
 │   └── hand_landmarker.task          # MediaPipe model (auto-downloaded)
 ├── mlflow/                           # MLflow tracking store
 ├── notebooks/
-├── Dockerfile
-├── .dockerignore
+├── app.py                            # Streamlit app (WebRTC + snapshot)
+├── packages.txt                      # system packages for Streamlit Cloud
 └── requirements.txt
 ```
 
@@ -77,7 +76,18 @@ mlflow ui --backend-store-uri file:./mlflow
 # open http://127.0.0.1:5000
 ```
 
-### 3. Real-time webcam inference
+### 3. Streamlit app (WebRTC)
+
+```bash
+streamlit run app.py
+```
+
+The app offers two modes:
+
+- **Live stream** — `streamlit-webrtc` captures webcam video, MediaPipe extracts hand landmarks server-side, and both models predict in real time with a HUD overlay drawn directly on the video frame.
+- **Snapshot fallback** — `st.camera_input` for networks where WebRTC is blocked; captures a single photo and returns predictions with per-class confidence bars.
+
+### 4. Real-time webcam inference (local script)
 
 ```bash
 python src/inference.py
@@ -90,49 +100,6 @@ The HUD overlays both model predictions and confidence bars simultaneously.
 Press **Q** or **Esc** to quit.
 
 > The MediaPipe hand landmarker model (~8 MB) is downloaded automatically on first run.
-
-### 4. FastAPI endpoint
-
-```bash
-uvicorn api.main:app --reload --port 8000
-```
-
-Interactive docs at **http://localhost:8000/docs**
-
-**Example request:**
-
-```bash
-curl -X POST http://localhost:8000/predict \
-     -H "Content-Type: application/json" \
-     -d '{"landmarks": [0.0, 0.1, -0.05, ...]}'   # 63 floats
-```
-
-**Response:**
-
-```json
-{
-  "xgboost": {
-    "label": "peace",
-    "confidence": 0.9123,
-    "probabilities": { "call": 0.001, "peace": 0.9123, ... }
-  },
-  "mlp": {
-    "label": "peace",
-    "confidence": 0.9451,
-    "probabilities": { "call": 0.0008, "peace": 0.9451, ... }
-  }
-}
-```
-
-### 5. Docker
-
-```bash
-# Build
-docker build -t gesture-api .
-
-# Run
-docker run -p 8000:8000 gesture-api
-```
 
 ---
 
@@ -204,8 +171,8 @@ Training: Adam (lr=1e-3, weight_decay=1e-4), ReduceLROnPlateau scheduler, early 
 
 | Model | Test Accuracy | Weighted F1 |
 |---|---|---|
-| XGBoost | 98.36% | 98.37% |
-| PyTorch MLP | **98.75%** | **98.76%** |
+| XGBoost | 98.46% | 98.46% |
+| PyTorch MLP | **98.79%** | **98.79%** |
 
 ---
 
@@ -227,8 +194,7 @@ All runs are automatically tracked in MLflow for comparison.
 - **MediaPipe 0.10** — hand landmark detection (Tasks API)
 - **XGBoost** — gradient boosted classifier
 - **PyTorch** — MLP with BatchNorm and Dropout
-- **Scikit-learn** — train/test split, metrics
+- **Scikit-learn** — train/test split, metrics, classification reports
 - **MLflow** — experiment tracking and model registry
 - **OpenCV** — webcam capture and HUD rendering
-- **FastAPI + Uvicorn** — REST inference endpoint
-- **Docker** — multi-stage containerization
+- **Streamlit + streamlit-webrtc** — real-time browser deployment
