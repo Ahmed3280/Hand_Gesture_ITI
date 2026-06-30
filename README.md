@@ -2,7 +2,7 @@
 
 End-to-end pipeline for real-time hand gesture recognition using MediaPipe landmarks, XGBoost, and a PyTorch MLP — with MLflow experiment tracking and a Streamlit Community Cloud deployment.
 <br>
-Demo Link : https://handgestureiti-y8ww8szsyucrhozsqsrj2p.streamlit.app/
+Demo Link : [link](https://handgestureiti-y8ww8szsyucrhozsqsrj2p.streamlit.app/)
 ---
 
 ## Overview
