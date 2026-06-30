@@ -192,10 +192,10 @@ All runs are automatically tracked in MLflow for comparison.
 ## Tech Stack
 
 - **Python 3.11**
-- **MediaPipe 0.10** — hand landmark detection (Tasks API)
-- **XGBoost** — gradient boosted classifier
-- **PyTorch** — MLP with BatchNorm and Dropout
-- **Scikit-learn** — train/test split, metrics, classification reports
-- **MLflow** — experiment tracking and model registry
-- **OpenCV** — webcam capture and HUD rendering
-- **Streamlit + streamlit-webrtc** — real-time browser deployment
+- **MediaPipe 0.10** hand landmark detection (Tasks API)
+- **XGBoost** gradient boosted classifier
+- **PyTorch** MLP with BatchNorm and Dropout
+- **Scikit-learn** train/test split, metrics, classification reports
+- **MLflow** experiment tracking and model registry
+- **OpenCV** webcam capture and HUD rendering
+- **Streamlit + streamlit-webrtc** real-time browser deployment
